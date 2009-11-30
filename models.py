@@ -3,7 +3,7 @@
 """
 BruteBuster DB model.
 
-It makes use of the BB_MIN_FAILURES and BB_BLOCK_INTERVAL values in
+It makes use of the BB_MAX_FAILURES and BB_BLOCK_INTERVAL values in
 settings.py. If these are not present, default values are used.
 
 Blocks are applied against the unique combination of (user,IP). This means that
@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 
 # default values that can be overriden in settings.py
-BB_MIN_FAILURES = int(getattr(settings,'BB_MIN_FAILURES', 5))
+BB_MAX_FAILURES = int(getattr(settings,'BB_MAX_FAILURES', 5))
 BB_BLOCK_INTERVAL = int(getattr(settings,'BB_BLOCK_INTERVAL', 3))
 
 class FailedAttempt (models.Model):
@@ -31,7 +31,7 @@ class FailedAttempt (models.Model):
     def too_many_failures (self):
         """Check if the minumum number of failures needed for a block
         is reached"""
-        return self.failures >= BB_MIN_FAILURES
+        return self.failures >= BB_MAX_FAILURES
 
     def recent_failure (self):
         """Checks if the timestamp one the FailedAttempt object is
