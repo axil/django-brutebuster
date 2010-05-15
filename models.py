@@ -41,6 +41,7 @@ class FailedAttempt (models.Model):
     def blocked (self):
         """Shortcut function for checking both too_many_failures and recent_failure """
         return self.too_many_failures() and self.recent_failure()
+    blocked.boolean = True
 
     def __unicode__(self):
         return u'%s (%d failures until %s): ' % (self.username,self.failures, self.timestamp)
