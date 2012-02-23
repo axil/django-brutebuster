@@ -15,6 +15,9 @@ def protect_and_serve (auth_func):
     if hasattr(auth_func,'__BB_PROTECTED__'):
         # avoiding multiple decorations
         return auth_func
+
+    from django.conf import settings
+    from django import forms
     
     def decor (*args, **kwargs):
         """
@@ -40,7 +43,10 @@ def protect_and_serve (auth_func):
                     # of too many recent failures
                     fa.failures += 1
                     fa.save()
-                    return None
+                    if getattr(settings, 'BB_EXPLICIT_MESSAGE', True):
+                        raise forms.ValidationError('Too many failed attempts, try again later')
+                    else:
+                        return None
             else:
                 # the block interval is over, so let's start
                 # with a clean sheet
