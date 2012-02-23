@@ -2,8 +2,8 @@
 
 """Decorators used by BruteBuster"""
 
-from BruteBuster.models import FailedAttempt
-from BruteBuster.middleware import get_request
+from .models import FailedAttempt
+from .middleware import get_request
 
 def protect_and_serve (auth_func):
     """
